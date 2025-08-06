@@ -2,57 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* ANTT Dashboard Design System - Professional government interface
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
+    /* Base colors */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 210 20% 15%;
 
+    /* Card system */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 210 20% 15%;
 
+    /* Popover system */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 20% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* ANTT Brand Colors */
+    --primary: 210 85% 25%;
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 210 85% 30%;
+    --primary-light: 210 85% 35%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Government secondary palette */
+    --secondary: 210 20% 95%;
+    --secondary-foreground: 210 20% 15%;
+    --secondary-hover: 210 20% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Status colors for KPIs */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --success-light: 142 76% 45%;
+    
+    --warning: 45 93% 47%;
+    --warning-foreground: 0 0% 98%;
+    --warning-light: 45 93% 55%;
+    
+    --danger: 0 84% 60%;
+    --danger-foreground: 0 0% 98%;
+    --danger-light: 0 84% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Neutral system */
+    --muted: 210 15% 96%;
+    --muted-foreground: 210 15% 45%;
+    --muted-dark: 210 15% 85%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --accent: 210 85% 25%;
+    --accent-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
+    /* Border and input system */
+    --border: 210 15% 88%;
+    --input: 210 15% 88%;
+    --ring: 210 85% 25%;
+
+    /* Design system */
     --radius: 0.5rem;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(var(--success-light)));
+    --gradient-warning: linear-gradient(135deg, hsl(var(--warning)), hsl(var(--warning-light)));
+    --gradient-danger: linear-gradient(135deg, hsl(var(--danger)), hsl(var(--danger-light)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
 
-    --sidebar-background: 0 0% 98%;
+    /* Shadows */
+    --shadow-soft: 0 2px 8px -2px hsl(var(--primary) / 0.1);
+    --shadow-medium: 0 4px 16px -4px hsl(var(--primary) / 0.15);
+    --shadow-strong: 0 8px 32px -8px hsl(var(--primary) / 0.2);
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    /* Sidebar specific */
+    --sidebar-background: 210 85% 25%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 210 85% 30%;
     --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 210 85% 35%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 210 85% 20%;
+    --sidebar-ring: 210 85% 25%;
 
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Chart colors */
+    --chart-1: 210 85% 25%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 45 93% 47%;
+    --chart-4: 0 84% 60%;
+    --chart-5: 260 85% 45%;
   }
 
   .dark {
