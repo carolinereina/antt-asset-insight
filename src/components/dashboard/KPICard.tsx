@@ -13,15 +13,18 @@ export interface KPIData {
 }
 
 interface KPICardProps {
-  data: KPIData;
+  title: string;
+  value: string | number;
+  trend?: { value: number; isPositive: boolean };
+  subtitle?: string;
+  variant?: 'success' | 'warning' | 'danger' | 'neutral';
   className?: string;
 }
 
-export function KPICard({ data, className }: KPICardProps) {
-  const { title, value, change, trend, status = 'neutral', unit, subtitle } = data;
+export function KPICard({ title, value, trend, subtitle, variant = 'neutral', className }: KPICardProps) {
 
   const getStatusStyles = () => {
-    switch (status) {
+    switch (variant) {
       case 'success':
         return 'border-success/20 bg-gradient-success text-success-foreground';
       case 'warning':
@@ -34,15 +37,12 @@ export function KPICard({ data, className }: KPICardProps) {
   };
 
   const getTrendIcon = () => {
-    switch (trend) {
-      case 'up':
-        return <TrendingUp size={16} className="text-success" />;
-      case 'down':
-        return <TrendingDown size={16} className="text-danger" />;
-      case 'stable':
-        return <Minus size={16} className="text-muted-foreground" />;
-      default:
-        return null;
+    if (!trend) return null;
+    
+    if (trend.isPositive) {
+      return <TrendingUp size={16} className="text-success" />;
+    } else {
+      return <TrendingDown size={16} className="text-danger" />;
     }
   };
 
@@ -62,7 +62,6 @@ export function KPICard({ data, className }: KPICardProps) {
           <div>
             <div className="text-2xl font-bold">
               {value}
-              {unit && <span className="text-lg font-normal ml-1">{unit}</span>}
             </div>
             {subtitle && (
               <p className="text-xs opacity-75 mt-1">{subtitle}</p>
@@ -70,14 +69,12 @@ export function KPICard({ data, className }: KPICardProps) {
           </div>
           <div className="flex items-center gap-1 text-xs">
             {getTrendIcon()}
-            {change !== undefined && (
+            {trend && (
               <span className={cn(
                 "font-medium",
-                trend === 'up' ? "text-success" : 
-                trend === 'down' ? "text-danger" : 
-                "text-muted-foreground"
+                trend.isPositive ? "text-success" : "text-danger"
               )}>
-                {change > 0 ? '+' : ''}{change}%
+                {trend.value > 0 ? '+' : ''}{trend.value}%
               </span>
             )}
           </div>

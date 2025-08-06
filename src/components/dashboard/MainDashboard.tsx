@@ -4,15 +4,14 @@ import { DashboardHeader } from "./DashboardHeader";
 import { ExecutiveSummary } from "./ExecutiveSummary";
 import { SGPDashboard } from "./SGPDashboard";
 import { SGSDashboard } from "./SGSDashboard";
-
-function SGOAEDashboard() {
-  return (
-    <div className="p-8 text-center">
-      <h2 className="text-2xl font-bold mb-4">Sistema de Gestão de OAE</h2>
-      <p className="text-muted-foreground">Dashboard em desenvolvimento...</p>
-    </div>
-  );
-}
+import { SGOAEDashboard } from "./SGOAEDashboard";
+import { SGOACDashboard } from "./SGOACDashboard";
+import { SGTECDashboard } from "./SGTECDashboard";
+import { SGFDashboard } from "./SGFDashboard";
+import { SGEDashboard } from "./SGEDashboard";
+import { SGSEIDashboard } from "./SGSEIDashboard";
+import { SGOSTDashboard } from "./SGOSTDashboard";
+import { SGITSDashboard } from "./SGITSDashboard";
 
 export function MainDashboard() {
   const [activeSubSystem, setActiveSubSystem] = useState('summary');
@@ -35,6 +34,20 @@ export function MainDashboard() {
         return <SGSDashboard />;
       case 'sgoae':
         return <SGOAEDashboard />;
+      case 'sgoac':
+        return <SGOACDashboard />;
+      case 'sgtec':
+        return <SGTECDashboard />;
+      case 'sgf':
+        return <SGFDashboard />;
+      case 'sge':
+        return <SGEDashboard />;
+      case 'sgsei':
+        return <SGSEIDashboard />;
+      case 'sgost':
+        return <SGOSTDashboard />;
+      case 'sgits':
+        return <SGITSDashboard />;
       default:
         return (
           <div className="p-8 text-center">

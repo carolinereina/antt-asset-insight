@@ -82,7 +82,14 @@ export function SGPDashboard() {
       {/* KPIs Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {sgpKPIs.map((kpi, index) => (
-          <KPICard key={index} data={kpi} />
+          <KPICard 
+            key={index} 
+            title={kpi.title}
+            value={kpi.value + (kpi.unit || '')}
+            trend={{ value: kpi.change || 0, isPositive: kpi.trend === 'up' }}
+            subtitle={kpi.subtitle}
+            variant={kpi.status === 'success' ? 'success' : kpi.status === 'warning' ? 'warning' : 'neutral'}
+          />
         ))}
       </div>
 
