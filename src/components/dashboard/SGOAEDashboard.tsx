@@ -2,35 +2,51 @@ import { KPICard } from "./KPICard";
 import { AssetPredictionChart } from "./AssetPredictionChart";
 import { StatusDistributionChart } from "./StatusDistributionChart";
 
-const mockOAEPredictionData = [
-  { period: '2022 Q1', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q2', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q3', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2022 Q4', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q1', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q2', real: 1, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q3', real: 1, predicted: 1, status: 'Ruim' as const },
-  { period: '2023 Q4', real: 1, predicted: 1, status: 'Ruim' as const },
-  { period: '2024 Q1', predicted: 1, status: 'Ruim' as const },
-  { period: '2024 Q2', predicted: 2, status: 'Regular' as const },
-  { period: '2024 Q3', predicted: 2, status: 'Regular' as const },
-  { period: '2024 Q4', predicted: 3, status: 'Bom' as const },
+// Nota Técnica das OAEs (0-5)
+const mockOAEConditionData = [
+  { period: '2022 Q1', real: 4.2, predicted: 4.1 },
+  { period: '2022 Q2', real: 4.0, predicted: 4.0 },
+  { period: '2022 Q3', real: 3.8, predicted: 3.9 },
+  { period: '2022 Q4', real: 3.5, predicted: 3.6 },
+  { period: '2023 Q1', real: 3.3, predicted: 3.4 },
+  { period: '2023 Q2', real: 2.9, predicted: 3.1 },
+  { period: '2023 Q3', real: 2.7, predicted: 2.8 },
+  { period: '2023 Q4', real: 2.8, predicted: 2.6 },
+  { period: '2024 Q1', predicted: 2.5 },
+  { period: '2024 Q2', predicted: 2.8 },
+  { period: '2024 Q3', predicted: 3.1 },
+  { period: '2024 Q4', predicted: 3.4 },
 ];
 
+// Estado de Conservação Elementos Estruturais (0-5)
 const mockStructuralData = [
-  { period: '2022 Q1', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q2', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q3', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q4', real: 2, predicted: 3, status: 'Bom' as const },
-  { period: '2023 Q1', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q2', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q3', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q4', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2024 Q1', predicted: 2, status: 'Regular' as const },
-  { period: '2024 Q2', predicted: 2, status: 'Regular' as const },
-  { period: '2024 Q3', predicted: 1, status: 'Ruim' as const },
-  { period: '2024 Q4', predicted: 1, status: 'Ruim' as const },
+  { period: '2022 Q1', real: 4.5, predicted: 4.4 },
+  { period: '2022 Q2', real: 4.3, predicted: 4.3 },
+  { period: '2022 Q3', real: 4.1, predicted: 4.1 },
+  { period: '2022 Q4', real: 3.8, predicted: 3.9 },
+  { period: '2023 Q1', real: 3.6, predicted: 3.7 },
+  { period: '2023 Q2', real: 3.4, predicted: 3.5 },
+  { period: '2023 Q3', real: 3.2, predicted: 3.3 },
+  { period: '2023 Q4', real: 3.1, predicted: 3.1 },
+  { period: '2024 Q1', predicted: 2.9 },
+  { period: '2024 Q2', predicted: 2.7 },
+  { period: '2024 Q3', predicted: 2.5 },
+  { period: '2024 Q4', predicted: 2.3 },
 ];
+
+const oaeConditionParameter = {
+  name: 'Nota Técnica das OAEs',
+  unit: '',
+  range: { min: 0, max: 5 },
+  thresholds: { good: 3.5, regular: 2.5 }
+};
+
+const structuralParameter = {
+  name: 'Estado de Conservação Estrutural',
+  unit: '',
+  range: { min: 0, max: 5 },
+  thresholds: { good: 3.5, regular: 2.5 }
+};
 
 const mockRiskDistribution = [
   { name: 'Baixo Risco', value: 65, color: 'hsl(var(--success))' },
@@ -75,13 +91,15 @@ export function SGOAEDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AssetPredictionChart
           title="Condição Geral das OAEs"
-          data={mockOAEPredictionData}
+          data={mockOAEConditionData}
+          parameter={oaeConditionParameter}
           assetName="Pontes e Viadutos (47 unidades)"
         />
         
         <AssetPredictionChart
           title="Estado dos Elementos Estruturais"
           data={mockStructuralData}
+          parameter={structuralParameter}
           assetName="Elementos Críticos (189 componentes)"
         />
       </div>

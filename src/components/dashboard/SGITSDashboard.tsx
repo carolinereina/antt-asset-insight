@@ -74,13 +74,15 @@ export function SGITSDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AssetPredictionChart
           title="Estado das Instalações"
-          data={mockFacilityConditionData}
+          data={[{ period: '2024 Q1', predicted: 97.8 }]}
+          parameter={{ name: 'Estado Geral', unit: '%', range: { min: 0, max: 100 }, thresholds: { good: 90, regular: 80 } }}
           assetName="28 Instalações Prediais"
         />
         
         <AssetPredictionChart
           title="Disponibilidade dos Equipamentos"
-          data={mockEquipmentUptimeData}
+          data={[{ period: '2024 Q1', predicted: 97.8 }]}
+          parameter={{ name: 'Uptime', unit: '%', range: { min: 0, max: 100 }, thresholds: { good: 95, regular: 90 } }}
           assetName="1.247 Equipamentos ITS"
         />
       </div>

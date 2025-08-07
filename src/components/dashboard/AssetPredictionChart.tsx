@@ -5,40 +5,49 @@ interface PredictionDataPoint {
   period: string;
   real?: number;
   predicted: number;
-  status: 'Bom' | 'Regular' | 'Ruim';
+  status?: 'Bom' | 'Regular' | 'Ruim';
+  unit?: string;
+}
+
+interface ParameterConfig {
+  name: string;
+  unit: string;
+  range: { min: number; max: number };
+  thresholds: { good: number; regular: number };
+  format?: (value: number) => string;
 }
 
 interface AssetPredictionChartProps {
   title: string;
   data: PredictionDataPoint[];
   assetName: string;
+  parameter: ParameterConfig;
   className?: string;
 }
 
-// Convert status to numeric values for charting
-const statusToValue = (status: 'Bom' | 'Regular' | 'Ruim'): number => {
-  switch (status) {
-    case 'Bom': return 3;
-    case 'Regular': return 2;
-    case 'Ruim': return 1;
-    default: return 2;
-  }
+// Get status based on parameter value and thresholds
+const getStatus = (value: number, parameter: ParameterConfig): string => {
+  if (value >= parameter.thresholds.good) return 'Bom';
+  if (value >= parameter.thresholds.regular) return 'Regular';
+  return 'Ruim';
 };
 
-// Custom tooltip to show status text
-const CustomTooltip = ({ active, payload, label }: any) => {
+// Custom tooltip to show parameter values
+const CustomTooltip = ({ active, payload, label, parameter }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
+    const formatValue = parameter.format || ((v: number) => `${v.toFixed(1)} ${parameter.unit}`);
+    
     return (
       <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
         <p className="font-medium">{`Período: ${label}`}</p>
         {data.real !== undefined && (
           <p className="text-chart-1">
-            {`Real: ${data.real === 3 ? 'Bom' : data.real === 2 ? 'Regular' : 'Ruim'}`}
+            {`Real: ${formatValue(data.real)} (${getStatus(data.real, parameter)})`}
           </p>
         )}
         <p className="text-chart-2">
-          {`Predição: ${data.status}`}
+          {`Predição: ${formatValue(data.predicted)} (${getStatus(data.predicted, parameter)})`}
         </p>
       </div>
     );
@@ -46,27 +55,26 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-// Custom Y-axis formatter
-const formatYAxis = (value: number) => {
-  switch (value) {
-    case 3: return 'Bom';
-    case 2: return 'Regular';
-    case 1: return 'Ruim';
-    default: return '';
+// Custom Y-axis formatter for parameter values
+const formatYAxis = (value: number, parameter: ParameterConfig) => {
+  if (parameter.format) {
+    return parameter.format(value);
   }
+  return `${value}${parameter.unit}`;
 };
 
 export function AssetPredictionChart({ 
   title, 
   data, 
   assetName,
+  parameter,
   className 
 }: AssetPredictionChartProps) {
   // Convert data for chart
   const chartData = data.map(item => ({
     ...item,
     realValue: item.real !== undefined ? item.real : null,
-    predictedValue: statusToValue(item.status)
+    predictedValue: item.predicted
   }));
 
   return (
@@ -88,11 +96,10 @@ export function AssetPredictionChart({
               <YAxis 
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
-                domain={[0.5, 3.5]}
-                ticks={[1, 2, 3]}
-                tickFormatter={formatYAxis}
+                domain={[parameter.range.min * 0.9, parameter.range.max * 1.1]}
+                tickFormatter={(value) => formatYAxis(value, parameter)}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={(props) => <CustomTooltip {...props} parameter={parameter} />} />
               <Legend />
               
               {/* Real data line (historical) */}
@@ -120,19 +127,24 @@ export function AssetPredictionChart({
           </ResponsiveContainer>
         </div>
         
-        {/* Status Legend */}
-        <div className="mt-4 flex justify-center gap-6 text-sm">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-success rounded-full"></div>
-            <span>Bom</span>
+        {/* Parameter Info and Thresholds */}
+        <div className="mt-4 space-y-2">
+          <div className="flex justify-center text-sm text-muted-foreground">
+            <span>{parameter.name} ({parameter.unit})</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-warning rounded-full"></div>
-            <span>Regular</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-destructive rounded-full"></div>
-            <span>Ruim</span>
+          <div className="flex justify-center gap-4 text-xs">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-success rounded-full"></div>
+              <span>≥ {parameter.thresholds.good}{parameter.unit}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-warning rounded-full"></div>
+              <span>≥ {parameter.thresholds.regular}{parameter.unit}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-destructive rounded-full"></div>
+              <span>&lt; {parameter.thresholds.regular}{parameter.unit}</span>
+            </div>
           </div>
         </div>
       </CardContent>

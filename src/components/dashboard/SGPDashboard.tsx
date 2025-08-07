@@ -1,73 +1,53 @@
 import { KPICard } from "./KPICard";
-import { PerformanceChart } from "./PerformanceChart";
+import { AssetPredictionChart } from "./AssetPredictionChart";
 import { StatusDistributionChart } from "./StatusDistributionChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Mock data for SGP (Sistema de Gestão de Pavimento)
-const sgpKPIs = [
-  {
-    title: "IGG Médio",
-    value: 3.2,
-    change: -2.3,
-    trend: 'down' as const,
-    status: 'warning' as const,
-    unit: "/5.0",
-    subtitle: "Meta: ≥ 3.5"
-  },
-  {
-    title: "IRI Médio",
-    value: 2.8,
-    change: 8.5,
-    trend: 'up' as const,
-    status: 'danger' as const,
-    unit: "m/km",
-    subtitle: "Meta: ≤ 2.5"
-  },
-  {
-    title: "Trechos Classe A",
-    value: 24,
-    change: -12.0,
-    trend: 'down' as const,
-    status: 'warning' as const,
-    unit: "%",
-    subtitle: "78 km de 328 km"
-  },
-  {
-    title: "Economia Manutenção",
-    value: 15,
-    change: 23.0,
-    trend: 'up' as const,
-    status: 'success' as const,
-    unit: "%",
-    subtitle: "R$ 1.2M poupados"
-  }
+// IRI Data (International Roughness Index)
+const mockIRIData = [
+  { period: '2022 Q1', real: 1.8, predicted: 1.8 },
+  { period: '2022 Q2', real: 2.1, predicted: 2.0 },
+  { period: '2022 Q3', real: 2.4, predicted: 2.3 },
+  { period: '2022 Q4', real: 2.8, predicted: 2.6 },
+  { period: '2023 Q1', real: 3.2, predicted: 3.0 },
+  { period: '2023 Q2', real: 3.5, predicted: 3.4 },
+  { period: '2023 Q3', real: 3.1, predicted: 3.8 },
+  { period: '2023 Q4', real: 2.9, predicted: 2.8 },
+  { period: '2024 Q1', predicted: 3.2 },
+  { period: '2024 Q2', predicted: 3.6 },
+  { period: '2024 Q3', predicted: 4.1 },
+  { period: '2024 Q4', predicted: 4.5 },
 ];
 
-const iggEvolutionData = [
-  { month: "Jan/23", real: 3.8, predicted: 3.7 },
-  { month: "Mar/23", real: 3.7, predicted: 3.6 },
-  { month: "Mai/23", real: 3.6, predicted: 3.5 },
-  { month: "Jul/23", real: 3.4, predicted: 3.4 },
-  { month: "Set/23", real: 3.3, predicted: 3.3 },
-  { month: "Nov/23", real: 3.2, predicted: 3.2 },
-  { month: "Jan/24", real: 3.2, predicted: 3.1 },
-  { month: "Mar/24", real: 0, predicted: 3.0 },
-  { month: "Mai/24", real: 0, predicted: 2.9 },
-  { month: "Jul/24", real: 0, predicted: 2.8 }
+// IGG Data (Geometric Condition Index)
+const mockIGGData = [
+  { period: '2022 Q1', real: 4.2, predicted: 4.1 },
+  { period: '2022 Q2', real: 4.0, predicted: 4.0 },
+  { period: '2022 Q3', real: 3.8, predicted: 3.8 },
+  { period: '2022 Q4', real: 3.5, predicted: 3.6 },
+  { period: '2023 Q1', real: 3.3, predicted: 3.4 },
+  { period: '2023 Q2', real: 3.1, predicted: 3.2 },
+  { period: '2023 Q3', real: 3.4, predicted: 3.0 },
+  { period: '2023 Q4', real: 3.6, predicted: 3.7 },
+  { period: '2024 Q1', predicted: 3.4 },
+  { period: '2024 Q2', predicted: 3.1 },
+  { period: '2024 Q3', predicted: 2.8 },
+  { period: '2024 Q4', predicted: 2.5 },
 ];
 
-const iriEvolutionData = [
-  { month: "Jan/23", real: 2.1, predicted: 2.2 },
-  { month: "Mar/23", real: 2.3, predicted: 2.3 },
-  { month: "Mai/23", real: 2.4, predicted: 2.4 },
-  { month: "Jul/23", real: 2.6, predicted: 2.5 },
-  { month: "Set/23", real: 2.7, predicted: 2.6 },
-  { month: "Nov/23", real: 2.8, predicted: 2.7 },
-  { month: "Jan/24", real: 2.8, predicted: 2.8 },
-  { month: "Mar/24", real: 0, predicted: 2.9 },
-  { month: "Mai/24", real: 0, predicted: 3.0 },
-  { month: "Jul/24", real: 0, predicted: 3.1 }
-];
+const iriParameter = {
+  name: 'IRI - Índice de Irregularidade Internacional',
+  unit: ' m/km',
+  range: { min: 0, max: 6 },
+  thresholds: { good: 2.7, regular: 3.5 }
+};
+
+const iggParameter = {
+  name: 'IGG - Índice de Condição Geométrica',
+  unit: '',
+  range: { min: 0, max: 5 },
+  thresholds: { good: 3.5, regular: 2.5 }
+};
 
 const classDistributionData = [
   { name: "Classe A (IGG ≥ 4.0)", value: 78, color: "#10B981" },
@@ -79,32 +59,51 @@ const classDistributionData = [
 export function SGPDashboard() {
   return (
     <div className="space-y-6">
-      {/* KPIs Grid */}
+      {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {sgpKPIs.map((kpi, index) => (
-          <KPICard 
-            key={index} 
-            title={kpi.title}
-            value={kpi.value + (kpi.unit || '')}
-            trend={{ value: kpi.change || 0, isPositive: kpi.trend === 'up' }}
-            subtitle={kpi.subtitle}
-            variant={kpi.status === 'success' ? 'success' : kpi.status === 'warning' ? 'warning' : 'neutral'}
-          />
-        ))}
+        <KPICard
+          title="IGG Médio"
+          value="3.2"
+          trend={{ value: -2.3, isPositive: false }}
+          subtitle="Meta: ≥ 3.5"
+          variant="warning"
+        />
+        <KPICard
+          title="IRI Médio"
+          value="2.8 m/km"
+          trend={{ value: 8.5, isPositive: false }}
+          subtitle="Meta: ≤ 2.5"
+        />
+        <KPICard
+          title="Trechos Classe A"
+          value="24%"
+          trend={{ value: -12, isPositive: false }}
+          subtitle="78 km de 328 km"
+          variant="warning"
+        />
+        <KPICard
+          title="Economia Manutenção"
+          value="15%"
+          trend={{ value: 23, isPositive: true }}
+          subtitle="R$ 1.2M poupados"
+          variant="success"
+        />
       </div>
 
-      {/* Performance Charts */}
+      {/* Prediction Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <PerformanceChart
-          title="Evolução do IGG (Índice de Gravidade Global)"
-          data={iggEvolutionData}
-          yAxisLabel="IGG"
+        <AssetPredictionChart
+          title="Evolução do IRI"
+          data={mockIRIData}
+          parameter={iriParameter}
+          assetName="Trechos Monitorados (145 km)"
         />
         
-        <PerformanceChart
-          title="Evolução do IRI (Índice de Irregularidade Internacional)"
-          data={iriEvolutionData}
-          yAxisLabel="IRI (m/km)"
+        <AssetPredictionChart
+          title="Evolução do IGG"
+          data={mockIGGData}
+          parameter={iggParameter}
+          assetName="Malha Rodoviária Principal"
         />
       </div>
 
@@ -127,7 +126,7 @@ export function SGPDashboard() {
                   const intensity = Math.random();
                   let bgColor = 'bg-success';
                   if (intensity > 0.7) {
-                    bgColor = 'bg-danger';
+                    bgColor = 'bg-destructive';
                   } else if (intensity > 0.4) {
                     bgColor = 'bg-warning';
                   }
@@ -150,15 +149,15 @@ export function SGPDashboard() {
               <div className="flex items-center gap-4 text-xs">
                 <div className="flex items-center gap-1">
                   <div className="w-3 h-3 bg-success rounded"></div>
-                  <span>IGG maior ou igual 3.5</span>
+                  <span>IGG ≥ 3.5</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <div className="w-3 h-3 bg-warning rounded"></div>
-                  <span>IGG entre 2.5 e 3.5</span>
+                  <span>IGG 2.5-3.5</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 bg-danger rounded"></div>
-                  <span>IGG menor que 2.5</span>
+                  <div className="w-3 h-3 bg-destructive rounded"></div>
+                  <span>IGG &lt; 2.5</span>
                 </div>
               </div>
             </div>

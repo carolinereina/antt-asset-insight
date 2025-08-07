@@ -2,35 +2,51 @@ import { KPICard } from "./KPICard";
 import { AssetPredictionChart } from "./AssetPredictionChart";
 import { StatusDistributionChart } from "./StatusDistributionChart";
 
+// Conformidade Ambiental (% de requisitos atendidos)
 const mockEnvironmentalComplianceData = [
-  { period: '2022 Q1', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q2', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q3', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q4', real: 2, predicted: 3, status: 'Bom' as const },
-  { period: '2023 Q1', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q2', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q3', real: 3, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q4', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q1', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q2', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q3', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q4', predicted: 3, status: 'Bom' as const },
+  { period: '2022 Q1', real: 96, predicted: 95 },
+  { period: '2022 Q2', real: 94, predicted: 95 },
+  { period: '2022 Q3', real: 93, predicted: 94 },
+  { period: '2022 Q4', real: 89, predicted: 91 },
+  { period: '2023 Q1', real: 87, predicted: 88 },
+  { period: '2023 Q2', real: 85, predicted: 86 },
+  { period: '2023 Q3', real: 92, predicted: 84 },
+  { period: '2023 Q4', real: 95, predicted: 94 },
+  { period: '2024 Q1', predicted: 93 },
+  { period: '2024 Q2', predicted: 91 },
+  { period: '2024 Q3', predicted: 89 },
+  { period: '2024 Q4', predicted: 87 },
 ];
 
+// Metas de Sustentabilidade (% de atingimento)
 const mockSustainabilityData = [
-  { period: '2022 Q1', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2022 Q2', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2022 Q3', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2022 Q4', real: 3, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q1', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2023 Q2', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2023 Q3', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2023 Q4', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q1', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q2', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q3', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q4', predicted: 3, status: 'Bom' as const },
+  { period: '2022 Q1', real: 78, predicted: 75 },
+  { period: '2022 Q2', real: 82, predicted: 80 },
+  { period: '2022 Q3', real: 85, predicted: 83 },
+  { period: '2022 Q4', real: 88, predicted: 86 },
+  { period: '2023 Q1', real: 91, predicted: 89 },
+  { period: '2023 Q2', real: 93, predicted: 92 },
+  { period: '2023 Q3', real: 95, predicted: 94 },
+  { period: '2023 Q4', real: 97, predicted: 96 },
+  { period: '2024 Q1', predicted: 94 },
+  { period: '2024 Q2', predicted: 91 },
+  { period: '2024 Q3', predicted: 88 },
+  { period: '2024 Q4', predicted: 85 },
 ];
+
+const environmentalComplianceParameter = {
+  name: 'Conformidade Ambiental',
+  unit: '%',
+  range: { min: 0, max: 100 },
+  thresholds: { good: 90, regular: 80 }
+};
+
+const sustainabilityParameter = {
+  name: 'Metas de Sustentabilidade',
+  unit: '%',
+  range: { min: 0, max: 100 },
+  thresholds: { good: 85, regular: 70 }
+};
 
 const mockLicenseStatus = [
   { name: 'Válidas', value: 85, color: 'hsl(var(--success))' },
@@ -75,12 +91,14 @@ export function SGEDashboard() {
         <AssetPredictionChart
           title="Conformidade Ambiental"
           data={mockEnvironmentalComplianceData}
+          parameter={environmentalComplianceParameter}
           assetName="47 Licenças Ambientais"
         />
         
         <AssetPredictionChart
           title="Metas de Sustentabilidade"
           data={mockSustainabilityData}
+          parameter={sustainabilityParameter}
           assetName="Indicadores ESG"
         />
       </div>

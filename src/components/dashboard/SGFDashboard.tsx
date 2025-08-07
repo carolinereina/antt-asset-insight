@@ -2,35 +2,51 @@ import { KPICard } from "./KPICard";
 import { AssetPredictionChart } from "./AssetPredictionChart";
 import { StatusDistributionChart } from "./StatusDistributionChart";
 
-const mockFinancialHealthData = [
-  { period: '2022 Q1', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q2', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q3', real: 2, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q4', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q1', real: 1, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q2', real: 1, predicted: 1, status: 'Ruim' as const },
-  { period: '2023 Q3', real: 2, predicted: 1, status: 'Ruim' as const },
-  { period: '2023 Q4', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2024 Q1', predicted: 2, status: 'Regular' as const },
-  { period: '2024 Q2', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q3', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q4', predicted: 3, status: 'Bom' as const },
+// Margem EBITDA (%)
+const mockEBITDAData = [
+  { period: '2022 Q1', real: 22.5, predicted: 22.0 },
+  { period: '2022 Q2', real: 23.1, predicted: 23.0 },
+  { period: '2022 Q3', real: 21.8, predicted: 22.5 },
+  { period: '2022 Q4', real: 20.2, predicted: 21.0 },
+  { period: '2023 Q1', real: 18.9, predicted: 19.5 },
+  { period: '2023 Q2', real: 17.3, predicted: 18.0 },
+  { period: '2023 Q3', real: 19.8, predicted: 17.0 },
+  { period: '2023 Q4', real: 21.5, predicted: 20.5 },
+  { period: '2024 Q1', predicted: 22.0 },
+  { period: '2024 Q2', predicted: 23.4 },
+  { period: '2024 Q3', predicted: 24.1 },
+  { period: '2024 Q4', predicted: 24.8 },
 ];
 
-const mockBudgetPerformanceData = [
-  { period: '2022 Q1', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q2', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q3', real: 3, predicted: 3, status: 'Bom' as const },
-  { period: '2022 Q4', real: 2, predicted: 3, status: 'Bom' as const },
-  { period: '2023 Q1', real: 2, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q2', real: 1, predicted: 2, status: 'Regular' as const },
-  { period: '2023 Q3', real: 1, predicted: 1, status: 'Ruim' as const },
-  { period: '2023 Q4', real: 2, predicted: 1, status: 'Ruim' as const },
-  { period: '2024 Q1', predicted: 2, status: 'Regular' as const },
-  { period: '2024 Q2', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q3', predicted: 3, status: 'Bom' as const },
-  { period: '2024 Q4', predicted: 3, status: 'Bom' as const },
+// ROI Investimentos (%)
+const mockROIData = [
+  { period: '2022 Q1', real: 15.2, predicted: 15.0 },
+  { period: '2022 Q2', real: 16.1, predicted: 16.0 },
+  { period: '2022 Q3', real: 16.8, predicted: 16.5 },
+  { period: '2022 Q4', real: 14.9, predicted: 15.5 },
+  { period: '2023 Q1', real: 13.2, predicted: 14.0 },
+  { period: '2023 Q2', real: 12.1, predicted: 13.0 },
+  { period: '2023 Q3', real: 14.8, predicted: 12.5 },
+  { period: '2023 Q4', real: 16.5, predicted: 15.8 },
+  { period: '2024 Q1', predicted: 17.2 },
+  { period: '2024 Q2', predicted: 18.2 },
+  { period: '2024 Q3', predicted: 18.8 },
+  { period: '2024 Q4', predicted: 19.5 },
 ];
+
+const ebitdaParameter = {
+  name: 'Margem EBITDA',
+  unit: '%',
+  range: { min: 0, max: 30 },
+  thresholds: { good: 20, regular: 15 }
+};
+
+const roiParameter = {
+  name: 'ROI - Retorno sobre Investimento',
+  unit: '%',
+  range: { min: 0, max: 25 },
+  thresholds: { good: 15, regular: 10 }
+};
 
 const mockExpenseDistribution = [
   { name: 'Manutenção', value: 45, color: 'hsl(var(--chart-1))' },
@@ -74,15 +90,17 @@ export function SGFDashboard() {
       {/* Prediction Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AssetPredictionChart
-          title="Saúde Financeira Geral"
-          data={mockFinancialHealthData}
+          title="Evolução da Margem EBITDA"
+          data={mockEBITDAData}
+          parameter={ebitdaParameter}
           assetName="Indicadores Consolidados"
         />
         
         <AssetPredictionChart
-          title="Performance Orçamentária"
-          data={mockBudgetPerformanceData}
-          assetName="Cumprimento de Metas"
+          title="ROI dos Investimentos"
+          data={mockROIData}
+          parameter={roiParameter}
+          assetName="Retorno sobre Capital Investido"
         />
       </div>
 

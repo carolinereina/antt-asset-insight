@@ -75,13 +75,15 @@ export function SGOSTDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AssetPredictionChart
           title="Tempo de Resposta"
-          data={mockResponseTimeData}
+          data={[{ period: '2024 Q1', predicted: 9.2 }]}
+          parameter={{ name: 'Tempo Resposta', unit: ' min', range: { min: 0, max: 20 }, thresholds: { good: 10, regular: 15 } }}
           assetName="Atendimento a Ocorrências"
         />
         
         <AssetPredictionChart
           title="Qualidade dos Serviços"
-          data={mockServiceQualityData}
+          data={[{ period: '2024 Q1', predicted: 4.7 }]}
+          parameter={{ name: 'Satisfação', unit: '/5', range: { min: 0, max: 5 }, thresholds: { good: 4, regular: 3 } }}
           assetName="Avaliação Terceirizados"
         />
       </div>

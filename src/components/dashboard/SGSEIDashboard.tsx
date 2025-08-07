@@ -74,13 +74,15 @@ export function SGSEIDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AssetPredictionChart
           title="Performance de Segurança"
-          data={mockSafetyPerformanceData}
+          data={[{ period: '2024 Q1', predicted: 0.8 }]}
+          parameter={{ name: 'Taxa Acidentes', unit: ' por 100k h', range: { min: 0, max: 3 }, thresholds: { good: 1, regular: 2 } }}
           assetName="Indicadores Consolidados"
         />
         
         <AssetPredictionChart
           title="Efetividade dos Treinamentos"
-          data={mockTrainingEffectivenessData}
+          data={[{ period: '2024 Q1', predicted: 98 }]}
+          parameter={{ name: 'Conformidade NRs', unit: '%', range: { min: 0, max: 100 }, thresholds: { good: 95, regular: 85 } }}
           assetName="Capacitação da Equipe"
         />
       </div>
