@@ -79,10 +79,10 @@ export function SGPDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard
           title="IGG Médio"
-          value="3.5"
+          value="3.2"
           trend={{ value: -2.3, isPositive: false }}
           subtitle="Meta: ≥ 3.5"
-          variant="warning"
+          variant="success"
         />
         <KPICard
           title="IRI Médio"
