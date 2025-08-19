@@ -82,7 +82,7 @@ export function SGPDashboard() {
           value="3.5"
           trend={{ value: -2.3, isPositive: false }}
           subtitle="Meta: ≥ 3.5"
-          variant="sucess"
+          variant="warning"
         />
         <KPICard
           title="IRI Médio"
